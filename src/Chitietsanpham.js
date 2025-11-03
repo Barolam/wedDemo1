@@ -1,5 +1,5 @@
 // src/Chitietsanpham.js
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { products } from "./models/product";
 import { supabase } from "./supabaseClient";
@@ -7,6 +7,7 @@ import { supabase } from "./supabaseClient";
 export default function Chitietsanpham() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [cart, setCart] = useState([]);
   const product = products.find((p) => p.id === Number(id));
 
   if (!product) {
@@ -17,6 +18,11 @@ export default function Chitietsanpham() {
       </div>
     );
   }
+
+  const addToCart = (product) => {
+    setCart((prevCart) => [...prevCart, product]);
+    alert(`${product.title} đã được thêm vào giỏ hàng!`);
+  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -39,6 +45,25 @@ export default function Chitietsanpham() {
             <strong>Loại:</strong> {product.category}
           </p>
           <p style={{ maxWidth: "400px" }}>{product.description}</p>
+
+          {/* Nút thêm vào giỏ hàng */}
+          <button
+            onClick={() => addToCart(product)}
+            style={{
+              marginTop: "10px",
+              padding: "10px 20px",
+              backgroundColor: "#28a745",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+            }}
+          >
+            Thêm vào giỏ hàng
+          </button>
+
+          {/* Hiển thị số lượng sản phẩm trong giỏ hàng */}
+          <p>Giỏ hàng: {cart.length} sản phẩm</p>
         </div>
       </div>
     </div>
